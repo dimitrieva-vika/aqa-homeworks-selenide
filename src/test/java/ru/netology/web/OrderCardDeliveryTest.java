@@ -1,8 +1,6 @@
 package ru.netology.web;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
@@ -15,11 +13,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
 public class OrderCardDeliveryTest {
-
-    @BeforeAll
-    static void setUpAll() {
-        // Настройки не требуются - Selenide использует значения по умолчанию
-    }
 
     @BeforeEach
     void setUp() {
@@ -55,7 +48,6 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -74,6 +66,7 @@ public class OrderCardDeliveryTest {
 
     /**
      * Тест-кейс №3: Пустой город
+     * Проверяем класс input_invalid у поля "Город"
      */
     @Test
     void shouldShowErrorWhenCityIsEmpty() {
@@ -81,11 +74,9 @@ public class OrderCardDeliveryTest {
         String name = "Иван Иванов";
         String phone = "+79270000000";
 
-        // Очищаем город
         $("[data-test-id='city'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='city'] input").sendKeys(Keys.DELETE);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -96,11 +87,15 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
+        // Проверяем класс input_invalid
+        $("[data-test-id='city']").shouldHave(cssClass("input_invalid"));
+        // Проверяем текст ошибки
         $("[data-test-id='city'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     /**
      * Тест-кейс №4: Некорректный город
+     * Проверяем класс input_invalid у поля "Город"
      */
     @Test
     void shouldShowErrorWhenCityIsInvalid() {
@@ -111,7 +106,6 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -122,12 +116,16 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
+        // Проверяем класс input_invalid
+        $("[data-test-id='city']").shouldHave(cssClass("input_invalid"));
+        // Проверяем текст ошибки
         $("[data-test-id='city'] .input__sub").shouldHave(text("Доставка в выбранный город недоступна"));
     }
 
     /**
      * Тест-кейс №5: Пустая дата
-     * Проверяем, что появляется сообщение об ошибке
+     * ВНИМАНИЕ! Для поля "Дата" класс input_invalid НЕ ДОБАВЛЯЕТСЯ!
+     * Проверяем только текст ошибки
      */
     @Test
     void shouldShowErrorWhenDateIsEmpty() {
@@ -137,7 +135,6 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
 
@@ -147,12 +144,18 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем текст ошибки (не класс, так как класс может не добавляться)
+        // Проверяем ТОЛЬКО текст ошибки (класс не добавляется!)
         $("[data-test-id='date'] .input__sub").shouldHave(text("Неверно введена дата"));
     }
 
     /**
+     * Тест-кейс №6: Дата менее 3 дней от текущей
+     * Пропускаем, так как даты ранее 3 дней недоступны для выбора
+     */
+
+    /**
      * Тест-кейс №7: Пустое имя
+     * Проверяем класс input_invalid у поля "Имя"
      */
     @Test
     void shouldShowErrorWhenNameIsEmpty() {
@@ -162,12 +165,10 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
 
-        // Очищаем имя
         $("[data-test-id='name'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='name'] input").sendKeys(Keys.DELETE);
 
@@ -176,11 +177,15 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
+        // Проверяем класс input_invalid
+        $("[data-test-id='name']").shouldHave(cssClass("input_invalid"));
+        // Проверяем текст ошибки
         $("[data-test-id='name'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     /**
      * Тест-кейс №8: Имя с цифрами
+     * Проверяем класс input_invalid у поля "Имя"
      */
     @Test
     void shouldShowErrorWhenNameContainsDigits() {
@@ -191,7 +196,6 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -202,12 +206,16 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
+        // Проверяем класс input_invalid
+        $("[data-test-id='name']").shouldHave(cssClass("input_invalid"));
+        // Проверяем текст ошибки
         String expectedError = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
         $("[data-test-id='name'] .input__sub").shouldHave(text(expectedError));
     }
 
     /**
      * Тест-кейс №9: Пустой телефон
+     * Проверяем класс input_invalid у поля "Телефон"
      */
     @Test
     void shouldShowErrorWhenPhoneIsEmpty() {
@@ -217,14 +225,12 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
 
         $("[data-test-id='name'] input").setValue(name);
 
-        // Очищаем телефон
         $("[data-test-id='phone'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='phone'] input").sendKeys(Keys.DELETE);
 
@@ -232,11 +238,15 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
+        // Проверяем класс input_invalid
+        $("[data-test-id='phone']").shouldHave(cssClass("input_invalid"));
+        // Проверяем текст ошибки
         $("[data-test-id='phone'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     /**
      * Тест-кейс №10: Некорректный телефон
+     * Проверяем класс input_invalid у поля "Телефон"
      */
     @Test
     void shouldShowErrorWhenPhoneIsInvalid() {
@@ -247,7 +257,6 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -258,13 +267,16 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
+        // Проверяем класс input_invalid
+        $("[data-test-id='phone']").shouldHave(cssClass("input_invalid"));
+        // Проверяем текст ошибки
         String expectedError = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
         $("[data-test-id='phone'] .input__sub").shouldHave(text(expectedError));
     }
 
     /**
      * Тест-кейс №11: Неотмеченный чекбокс
-     * Проверяем, что появляется ошибка (красный текст)
+     * ВНИМАНИЕ! Чекбокс получает класс input_invalid, а не checkbox_invalid!
      */
     @Test
     void shouldShowErrorWhenAgreementNotChecked() {
@@ -275,7 +287,6 @@ public class OrderCardDeliveryTest {
 
         $("[data-test-id='city'] input").setValue(city);
 
-        // Очищаем и заполняем дату
         $("[data-test-id='date'] input").sendKeys(Keys.CONTROL + "a");
         $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
         $("[data-test-id='date'] input").setValue(date);
@@ -290,16 +301,13 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем, что текст чекбокса стал красным
-        // Используем проверку CSS свойства color
-        String color = $("[data-test-id='agreement'] .checkbox__text").getCssValue("color");
-        // Проверяем, что цвет содержит красный компонент
-        boolean isRed = color.contains("rgb(255") || color.contains("255");
-        assert isRed : "Текст чекбокса должен стать красным. Текущий цвет: " + color;
+        // Проверяем класс input_invalid у чекбокса
+        $("[data-test-id='agreement']").shouldHave(cssClass("input_invalid"));
     }
 
     /**
      * Тест-кейс №12: Все поля пустые
+     * Проверяем, что ошибка только у поля "Город"
      */
     @Test
     void shouldShowErrorOnlyForCityWhenAllFieldsEmpty() {
@@ -318,10 +326,16 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем, что только поле "Город" получило ошибку
+        // Проверяем, что только поле "Город" имеет класс input_invalid
+        $("[data-test-id='city']").shouldHave(cssClass("input_invalid"));
         $("[data-test-id='city'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
 
-        // Проверяем, что остальные поля не имеют ошибок
+        // Проверяем, что остальные поля НЕ имеют класса input_invalid
+        $("[data-test-id='date']").shouldNotHave(cssClass("input_invalid"));
+        $("[data-test-id='name']").shouldNotHave(cssClass("input_invalid"));
+        $("[data-test-id='phone']").shouldNotHave(cssClass("input_invalid"));
+
+        // Проверяем подсказки остальных полей
         $("[data-test-id='date'] .input__sub").shouldHave(text("Выберите дату встречи с представителем банка"));
         $("[data-test-id='name'] .input__sub").shouldHave(text("Укажите точно как в паспорте"));
         $("[data-test-id='phone'] .input__sub").shouldHave(text("На указанный номер моб. тел. будет отправлен смс-код для подтверждения заявки на карту. Проверьте, что номер ваш и введен корректно."));
