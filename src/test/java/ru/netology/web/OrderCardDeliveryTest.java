@@ -66,7 +66,7 @@ public class OrderCardDeliveryTest {
 
     /**
      * Тест-кейс №3: Пустой город
-     * Проверяем класс input_invalid у поля "Город"
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenCityIsEmpty() {
@@ -87,15 +87,13 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid
-        $("[data-test-id='city']").shouldHave(cssClass("input_invalid"));
-        // Проверяем текст ошибки
-        $("[data-test-id='city'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
+        // Комбинированный селектор: data-test-id + класс input_invalid
+        $("[data-test-id='city'].input_invalid .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     /**
      * Тест-кейс №4: Некорректный город
-     * Проверяем класс input_invalid у поля "Город"
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenCityIsInvalid() {
@@ -116,10 +114,8 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid
-        $("[data-test-id='city']").shouldHave(cssClass("input_invalid"));
-        // Проверяем текст ошибки
-        $("[data-test-id='city'] .input__sub").shouldHave(text("Доставка в выбранный город недоступна"));
+        // Комбинированный селектор: data-test-id + класс input_invalid
+        $("[data-test-id='city'].input_invalid .input__sub").shouldHave(text("Доставка в выбранный город недоступна"));
     }
 
     /**
@@ -155,7 +151,7 @@ public class OrderCardDeliveryTest {
 
     /**
      * Тест-кейс №7: Пустое имя
-     * Проверяем класс input_invalid у поля "Имя"
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenNameIsEmpty() {
@@ -177,15 +173,13 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid
-        $("[data-test-id='name']").shouldHave(cssClass("input_invalid"));
-        // Проверяем текст ошибки
-        $("[data-test-id='name'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
+        // Комбинированный селектор: data-test-id + класс input_invalid
+        $("[data-test-id='name'].input_invalid .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     /**
      * Тест-кейс №8: Имя с цифрами
-     * Проверяем класс input_invalid у поля "Имя"
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenNameContainsDigits() {
@@ -206,16 +200,14 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid
-        $("[data-test-id='name']").shouldHave(cssClass("input_invalid"));
-        // Проверяем текст ошибки
+        // Комбинированный селектор: data-test-id + класс input_invalid
         String expectedError = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
-        $("[data-test-id='name'] .input__sub").shouldHave(text(expectedError));
+        $("[data-test-id='name'].input_invalid .input__sub").shouldHave(text(expectedError));
     }
 
     /**
      * Тест-кейс №9: Пустой телефон
-     * Проверяем класс input_invalid у поля "Телефон"
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenPhoneIsEmpty() {
@@ -238,15 +230,13 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid
-        $("[data-test-id='phone']").shouldHave(cssClass("input_invalid"));
-        // Проверяем текст ошибки
-        $("[data-test-id='phone'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
+        // Комбинированный селектор: data-test-id + класс input_invalid
+        $("[data-test-id='phone'].input_invalid .input__sub").shouldHave(text("Поле обязательно для заполнения"));
     }
 
     /**
      * Тест-кейс №10: Некорректный телефон
-     * Проверяем класс input_invalid у поля "Телефон"
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenPhoneIsInvalid() {
@@ -267,16 +257,15 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid
-        $("[data-test-id='phone']").shouldHave(cssClass("input_invalid"));
-        // Проверяем текст ошибки
+        // Комбинированный селектор: data-test-id + класс input_invalid
         String expectedError = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        $("[data-test-id='phone'] .input__sub").shouldHave(text(expectedError));
+        $("[data-test-id='phone'].input_invalid .input__sub").shouldHave(text(expectedError));
     }
 
     /**
      * Тест-кейс №11: Неотмеченный чекбокс
      * ВНИМАНИЕ! Чекбокс получает класс input_invalid, а не checkbox_invalid!
+     * Используем комбинированный селектор с классом input_invalid
      */
     @Test
     void shouldShowErrorWhenAgreementNotChecked() {
@@ -301,8 +290,9 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем класс input_invalid у чекбокса
-        $("[data-test-id='agreement']").shouldHave(cssClass("input_invalid"));
+        // Проверяем наличие класса input_invalid у чекбокса через комбинированный селектор
+        // У чекбокса нет .input__sub, поэтому проверяем сам элемент с классом
+        $("[data-test-id='agreement'].input_invalid").shouldBe(visible);
     }
 
     /**
@@ -326,9 +316,8 @@ public class OrderCardDeliveryTest {
 
         $$(".button__text").find(text("Забронировать")).click();
 
-        // Проверяем, что только поле "Город" имеет класс input_invalid
-        $("[data-test-id='city']").shouldHave(cssClass("input_invalid"));
-        $("[data-test-id='city'] .input__sub").shouldHave(text("Поле обязательно для заполнения"));
+        // Проверяем, что только поле "Город" имеет ошибку
+        $("[data-test-id='city'].input_invalid .input__sub").shouldHave(text("Поле обязательно для заполнения"));
 
         // Проверяем, что остальные поля НЕ имеют класса input_invalid
         $("[data-test-id='date']").shouldNotHave(cssClass("input_invalid"));
